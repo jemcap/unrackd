@@ -6,3 +6,13 @@ export const formatFollowers = (count: number) => {
   }
   return count.toString();
 };
+
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};

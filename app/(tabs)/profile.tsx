@@ -1,12 +1,52 @@
 import { useAuth } from "@/context/auth-context";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Avatar, Button, Divider, List, Text } from "react-native-paper";
 
 import { formatFollowers } from "@/utils/format";
 
+ export const [recentWorkouts] = useState([
+    {
+      id: 1,
+      type: "Primary Squats & Secondary Bench",
+      date: "2024-07-16",
+      exercises: [
+        { name: "Top Set Squat", sets: 1, reps: 3, weight: 220 },
+        { name: "Back Off Squat", sets: 3, reps: 5, weight: 175 },
+        { name: "Tempo Bench Press", sets: 3, reps: 8, weight: 90 },
+        { name: "Pull-Ups", sets: 3, reps: 8, weight: 0 },
+      ],
+      duration: 80,
+    },
+    {
+      id: 2,
+      type: "Primary Bench",
+      date: "2024-07-16",
+      exercises: [
+        { name: "Top Set Bench", sets: 1, reps: 3, weight: 220 },
+        { name: "Back Off Bench", sets: 3, reps: 5, weight: 175 },
+        { name: "Incline Dumbbell Press", sets: 3, reps: 8, weight: 40 },
+        { name: "Tricep Dips", sets: 3, reps: 10, weight: 0 },
+      ],
+      duration: 80,
+    },
+    {
+      id: 3,
+      type: "Primary Deadlifts & Secondary Squats",
+      date: "2024-07-16",
+      exercises: [
+        { name: "Top Set Deadlift", sets: 1, reps: 3, weight: 220 },
+        { name: "Back Off Deadlift", sets: 3, reps: 5, weight: 175 },
+        { name: "Back extensions", sets: 3, reps: 8, weight: 0 },
+      ],
+      duration: 80,
+    },
+  ]);
+
 const Profile = () => {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -75,43 +115,7 @@ const Profile = () => {
     },
   ]);
 
-  const [recentWorkouts] = useState([
-    {
-      id: 1,
-      type: "Primary Squats & Secondary Bench",
-      date: "2024-07-16",
-      exercises: [
-        { name: "Top Set Squat", sets: 1, reps: 3, weight: 220 },
-        { name: "Back Off Squat", sets: 3, reps: 5, weight: 175 },
-        { name: "Tempo Bench Press", sets: 3, reps: 8, weight: 90 },
-        { name: "Pull-Ups", sets: 3, reps: 8, weight: 0 },
-      ],
-      duration: 80,
-    },
-    {
-      id: 2,
-      type: "Primary Bench",
-      date: "2024-07-16",
-      exercises: [
-        { name: "Top Set Bench", sets: 1, reps: 3, weight: 220 },
-        { name: "Back Off Bench", sets: 3, reps: 5, weight: 175 },
-        { name: "Incline Dumbbell Press", sets: 3, reps: 8, weight: 40 },
-        { name: "Tricep Dips", sets: 3, reps: 10, weight: 0 },
-      ],
-      duration: 80,
-    },
-    {
-      id: 3,
-      type: "Primary Deadlifts & Secondary Squats",
-      date: "2024-07-16",
-      exercises: [
-        { name: "Top Set Deadlift", sets: 1, reps: 3, weight: 220 },
-        { name: "Back Off Deadlift", sets: 3, reps: 5, weight: 175 },
-        { name: "Back extensions", sets: 3, reps: 8, weight: 0 },
-      ],
-      duration: 80,
-    },
-  ]);
+ 
 
   const [personalStats] = useState({
     workouts: recentWorkouts.length,
@@ -131,8 +135,6 @@ const Profile = () => {
       setLoading(false);
     }
   };
-
-
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -413,8 +415,9 @@ const Profile = () => {
               <View key={workout.id}>
                 <List.Item
                   title={workout.type}
-                  description={`${workout.date} • ${workout.duration} min`}
-                  onPress={() => console.log(`View workout ${workout.id}`)}
+                  description={`${workout.date} • ${workout.duration} min • ${workout.exercises.length} exercises`}
+                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  onPress={() => router.push(`/workout/${workout.id}`)}
                 />
                 {index < recentWorkouts.slice(0, 3).length - 1 && <Divider />}
               </View>
