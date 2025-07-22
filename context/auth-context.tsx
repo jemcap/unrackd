@@ -1,4 +1,5 @@
 import { account, databases } from "@/lib/appwrite";
+import { useRouter } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Models, Query } from "react-native-appwrite";
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     null
   );
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     checkAuthState();
@@ -50,16 +52,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };   
+  };
 
   const login = async (email: string, password: string) => {
     try {
       await account.createEmailPasswordSession(email, password);
       const currentUser = await account.get();
       setUser(currentUser);
+      if (currentUser) {
+        router.push("/(tabs)");
+      }
     } catch (error) {
-      console.error("Error logging in:", error);
       setUser(null);
+      throw error;
     }
   };
 
@@ -102,7 +107,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, isAuthenticated, login, logout, register, checkExistingUser }}
+      value={{
+        user,
+        loading,
+        isAuthenticated,
+        login,
+        logout,
+        register,
+        checkExistingUser,
+      }}
     >
       {loading ? null : children}
     </AuthContext.Provider>

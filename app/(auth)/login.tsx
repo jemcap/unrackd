@@ -5,11 +5,11 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { Button, Divider, Text, TextInput } from "react-native-paper";
 
 export default function AuthLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const { login } = useAuth();
   const router = useRouter();
@@ -36,9 +36,9 @@ export default function AuthLogin() {
 
     try {
       await login(email, password);
-      router.push("/(tabs)");
     } catch (err: any) {
-      setError(err.message || "Login failed. Please try again.");
+      const errMessage = err?.message || "Login failed. Please try again.";
+      setError(errMessage);
     } finally {
       setLoading(false);
     }
@@ -67,11 +67,7 @@ export default function AuthLogin() {
             </Text>
           </View>
 
-          {error ? (
-            <View className="mb-4 p-3 bg-red-50 rounded-lg">
-              <Text className="text-red-600 text-center">{error}</Text>
-            </View>
-          ) : null}
+          
 
           <View className="mb-6" style={{ gap: 16 }}>
             <TextInput
@@ -107,6 +103,12 @@ export default function AuthLogin() {
               }
             />
           </View>
+
+          {error ? (
+            <View className="mb-4 p-3 bg-red-50 rounded-lg">
+              <Text className="text-red-600 text-center">{error}</Text>
+            </View>
+          ) : null}
 
           <Button
             mode="contained"
