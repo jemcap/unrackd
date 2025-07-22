@@ -1,12 +1,11 @@
 import { Workout } from "@/types";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, Divider, IconButton, List, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { formatDate } from "@/utils/format";
-import { recentWorkouts } from "../(tabs)/profile";
 
 const WorkoutDetail = () => {
   const { id } = useLocalSearchParams();
@@ -14,12 +13,12 @@ const WorkoutDetail = () => {
   const insets = useSafeAreaInsets();
   const [workout, setWorkout] = useState<Workout | null>(null);
 
-  useEffect(() => {
-    const foundWorkout = recentWorkouts.find(
-      (w) => w.id === parseInt(id as string)
-    );
-    setWorkout(foundWorkout || null);
-  }, [id]);
+  // useEffect(() => {
+  //   const foundWorkout = recentWorkouts.find(
+  //     (w) => w.id === parseInt(id as string)
+  //   );
+  //   setWorkout(foundWorkout || null);
+  // }, [id]);
 
   if (!workout) {
     return (

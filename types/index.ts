@@ -24,7 +24,7 @@ export interface PersonalBests {
   squat: number;
   bench: number;
   deadlift: number;
-  total: number;
+  total?: number;
 }
 
 export interface Meet {
@@ -56,6 +56,32 @@ export interface Meet {
   weightCategory?: string;
   placing?: string;
 }
+
+export interface UpcomingMeet {
+  id: number;
+  name: string;
+  date: string;
+  location: string;
+  federation: string;
+  daysUntil: number;
+}
+
+export interface CompletedMeet {
+  id: number;
+  name: string;
+  date: string;
+  location: string;
+  weightCategory: string;
+  placing: string;
+  total: number;
+}
+
+export interface User {
+  name?: string;
+  email?: string;
+}
+
+export type TabValue = "overview" | "stats" | "history";
 
 export interface PersonalStats {
   workouts: number;
